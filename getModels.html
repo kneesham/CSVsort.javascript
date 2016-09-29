@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<link type="text/css" href="Models.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>File(s) size</title>
+<script>
+var select = ("option")
+     function GetModels() {
+     var nBytes = 0,
+           oFiles = document.getElementById("uploadInput").files,
+           nFiles = oFiles.length;
+
+         var reader = new FileReader();
+
+         document.getElementById("fileNum").innerHTML = oFiles.length;
+
+
+         reader.addEventListener("load", function() {
+          // reader.result contains the contents of blob as a typed array
+         document.getElementById('mytestid').innerText = reader.result;
+          var allTextLines = reader.result.split(/\r\n|\n/);
+          //document.getElementById('mytestid').innerText = allTextLines.length;
+          //var s = allTextLines[0].split(',');
+
+          for(var i = 0; i < allTextLines.length-1; i++) {
+
+            var s = allTextLines[i].split(',');
+
+         //   itemSpan.innerHTML = "Model Name: "+ s[0] +"   "+"Device Name: "+s[1];
+           //document.getElementById('mytestid').appendChild(li);
+           //  var li = document.createElement('li');
+           // li.appendChild(itemSpan);
+
+     }
+
+          //crates a new line
+          //  var itemSpan = document.createElement('span');
+
+       });
+
+           // Read in the image file as a data URL.
+           reader.readAsText(oFiles[0]);
+
+       }
+     </script>
+     </head>
+     <body>
+       <form name="uploadForm">
+       <p><input id="uploadInput" type="file" name="myFiles" onchange="GetModels();" multiple>
+        selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
+       <p><input type="submit" value="Send file"></p>
+
+       <p><span id="mytestid" class="list"></span> </p>

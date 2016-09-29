@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+  li {
+    color: black;
+}
+li:nth-child(odd) {
+    color: black;
+    background: #ffffff;
+
+}
+li:nth-child(even) {
+    color: black;
+    background: #E6E6E6;
+}
+
+</style>
+<link type="text/css" href="Models.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>File(s) size</title>
+<script>
+
+Array.prototype.contains = function(v) {
+  for(var i = 0; i < this.length; i++) {
+   if(this[i] === v) return true;
+   }
+   return false;
+ };
+
+Array.prototype.unique = function() {
+ var arr = [];
+ for(var i = 0; i < this.length; i++) {
+   if(!arr.contains(this[i])) {
+       arr.push(this[i]);
+   }
+ }
+ return arr;
+}
+
+var allTextLines;
+var reader = new FileReader();
+
+function eraseText() {
+    document.getElementById("wp8ModellList").value = "model";
+    document.getElementById('wp8List').value = "device";
+    document.getElementById('wp10list').value = "device";
+    document.getElementById("wp10ModelList").value = "model";
+
+    var select = document.getElementById("wp8ModellList");
+var length = select.options.length;
+for (i = 0; i < length; i++) {
+  select.options[i] = null;
+}
+
+}
+
+function NewList() {
+
+    var w10sel = document.getElementById("wp10list").value;
+    var w10ModelList = document.getElementById("wp10ModelList")
+    var w8sel = document.getElementById("wp8List").value;
+    var wp8ModellList = document.getElementById("wp8ModellList");
+    for(var i = 0; i < allTextLines.length-1; i++) {
+      var s = allTextLines[i].split(',');
+
+      if(w8sel == s[1]) {
+        var option = document.createElement('option');
+        option.text =  s[0];
+        option.text.clear = s[1];
+      //  option.text.clear = s[0];
+        wp8ModellList.add(option, 0);
+
+    }
+
+    if (w10sel == s[1]){
+      var option = document.createElement('option');
+      option.text = s[0];
+      option.text.clear = s[1];
+      wp10ModelList.add(option, 0);
+
+
+    }
+
+  }
+
+
+    var w10sel = document.getElementById("wp10list").value;
+    document.getElementById("demo8").innerHTML = "You selected: " + w8sel;
+    document.getElementById("demo10").innerHTML = "You selected: " + w10sel;
+  }
+
+function GetModels() {
+
+var deviceArray = new Array();
+var nBytes = 0,
+      oFiles = document.getElementById("uploadInput").files,
+      nFiles = oFiles.length;
+
+    reader = new FileReader();
+
+    document.getElementById("fileNum").innerHTML = oFiles.length;
+
+    reader.addEventListener("loadend", function() {
+     // reader.result contains the contents of blob as a typed array
+     //document.getElementById('mytestid').innerText = reader.result;
+     allTextLines = reader.result.split(/\r\n|\n/);
+     //document.getElementById('mytestid').innerText = allTextLines.length;
+     //var s = allTextLines[0].split(',');
+      var headLine = document.getElementById('headSpan');
+
+     for(var i = 0; i < allTextLines.length-1; i++) {
+
+       var s = allTextLines[i].split(',');
+      //  var itemSpan = document.createElement('span');
+      //  itemSpan.innerHTML = "Model Name: "+ s[0] +"   "+"Device Name: "+s[1];
+      //  var li = document.createElement('li');
+      // li.appendChild(itemSpan);
+      // document.getElementById('mytestid').appendChild(li);
+
+      if( deviceArray.contains(s[1])) continue;
+      deviceArray.push(s[1]);
+
+
+      if(s[2].indexOf('Windows 10') > -1) {
+        var wp10list =  document.getElementById('wp10list');
+        var option = document.createElement('option');
+        option.text = s[1];
+        wp10list.add(option, 0);
+      } else {
+        var wp8Model = document.getElementById('wp8List');
+
+        var option = document.createElement('option');
+        option.text =  s[1];
+        wp8List.add(option, 0);
+
+      }
+
+      //document.getElementById('mytestid').innerText = "Model Name: "+ s[0] +"   "+"Device Name: "+s[1] ;
+
+     }
+  });
+
+      // Read in the image file as a data URL.
+      reader.readAsText(oFiles[0]);
+
+  }
+
+
+
+
+
+</script>
+</head>
+<body>
+<form name="uploadForm">
+<p><input id="uploadInput" type="file" name="myFiles" onchange="GetModels();" multiple>
+ selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
+<p><input type="submit" value="Send file"></p>
+
+<p><span id="mytestid">0</span></p>
+
+<label for="wp8">Widows 8.1</label>
+
+</br>
+
+<!-- <select name="wp8" id="wp8list">
+</select> -->
+
+<select name="Device8" id="wp8List" onchange="NewList()" onclick="javascript:eraseText();">
+</select>
+<select id="wp8ModellList">
+</select>
+
+</br>
+<label for="wp10">Windows 10.0</label>
+</br>
+
+<select name="wp10" id="wp10list" onchange="NewList()" onclick="javascript:eraseText();">
+</select>
+
+<select name="Model10" id="wp10ModelList" onchange="NewList()">
+</select>
+<p id="demo8"></p>
+<p id="demo10"></p>
+
+</form>
+
+
+</body>
+</html>
